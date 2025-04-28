@@ -1,5 +1,7 @@
 import { NextRequest } from 'next/server';
 import { products } from '@/app/product-data';
+import { connectToDb } from '@/app/api/db'; 
+
 
 type ShoppingCart = Record<string, string[]>;
 
@@ -14,10 +16,12 @@ type Params = {
 }
 
 export async function GET(request: NextRequest, { params }: { params: Params }) {
-  const userId = params.id;
-  const productIds = carts[userId];
+  const { db } = await connectToDb();
 
-  if (productIds === undefined) {
+  const userId = params.id;
+  const userCart = await db.collection('carts').findOne({ userId })
+
+  if (!userCart) {
     return new Response(JSON.stringify([]), {
       status: 200,
       headers: {
@@ -25,9 +29,8 @@ export async function GET(request: NextRequest, { params }: { params: Params }) 
       }
     });
   }
-
-  const cartProducts = productIds.map(id => products.find(p => p.id === id));
-
+  const cartIds = userCart.cartIds;
+  const cartProducts = await db.collection('products').find({ id: {$in: cartIds }}).toArray()
   return new Response(JSON.stringify(cartProducts), {
     status: 200,
     headers: {
