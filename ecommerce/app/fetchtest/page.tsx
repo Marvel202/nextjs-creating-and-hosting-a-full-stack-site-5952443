@@ -6,14 +6,9 @@
 
 //   return <h1>{data.message}</h1>
 // }
-
-import { headers } from 'next/headers';
-
 export default async function FetchTest() {
     try {
-        const host = await headers().get('host');
-        const protocol = host?.includes('localhost') ? 'http' : 'https';
-        const baseUrl = `${protocol}://${host}`;
+        const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:3000';
         const response = await fetch(`${baseUrl}/api/hello`);
         if (!response.ok) {
             throw new Error(`Fetch failed with status: ${response.status}`);

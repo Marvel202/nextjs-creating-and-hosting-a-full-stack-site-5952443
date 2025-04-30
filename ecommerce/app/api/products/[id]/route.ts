@@ -8,7 +8,7 @@ type Params = {
 
 export async function GET(request: NextRequest, { params }: { params: Params }) {
   const { db } = await connectToDb();
-  const productId = params.id;
+  const productId = await params.id;
 
   const product = await db.collection('products').findOne({ id: productId });
 
