@@ -1,11 +1,7 @@
-export async function GET() {
-  return new Response(JSON.stringify({ message: 'Hello from a Next.js route handler!' }), {
-    status: 200,
-  });
-}
+// app/api/hello/route.ts
+import { getHelloMessage } from '@/lib/hello';
 
-export async function POST() {
-  return new Response('Thank you for posting to this handler', {
-    status: 200,
-  })
+export async function GET() {
+  const data = await getHelloMessage();
+  return Response.json(data);
 }

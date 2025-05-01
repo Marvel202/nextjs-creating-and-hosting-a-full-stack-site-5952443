@@ -1,16 +1,12 @@
+import { getProductById } from "@/lib/products";
 import NotFoundPage from "@/app/not-found";
 
+export const dynamic = 'force-dynamic';
 
 export default async function ProductDetailPage({ params }: { params: { id: string } }) {
-  const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:3000';             
-  const response = await fetch(`${baseUrl}/api/products/` + params.id);
-     if (!response.ok) {
-            throw new Error(`Fetch failed with status: ${response.status}`);
-        }
-  const product = await response.json();
-
+  const product = await getProductById(params.id);
   if (!product) {
-    return <NotFoundPage/>
+    return <NotFoundPage />;
   }
 
   return (

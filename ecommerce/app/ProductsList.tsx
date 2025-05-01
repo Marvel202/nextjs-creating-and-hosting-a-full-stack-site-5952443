@@ -9,7 +9,7 @@ export default function ProductsList({ products, initialCartProducts = [] }: { p
   const [cartProducts, setCartProducts] = useState(initialCartProducts)
   
   async function addToCart(productId: string) {
-     const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:3000';
+     const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000';
       const response = await fetch(`${baseUrl}/api/users/2/cart`, {
       method: 'POST',
       body: JSON.stringify({
@@ -24,7 +24,7 @@ export default function ProductsList({ products, initialCartProducts = [] }: { p
   }
 
   async function removeFromCart(productId: string) {
-    const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:3000';
+    const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000';
     const response = await fetch(`${baseUrl}/api/users/2/cart`, {
       method: 'DELETE',
       body: JSON.stringify({
@@ -54,7 +54,8 @@ export default function ProductsList({ products, initialCartProducts = [] }: { p
             <Image
               src={'/' + product.imageUrl}
               alt="Product image"
-              fill // Fill the container
+              width={300}
+              height={300}
               className="object-cover rounded-md" // Cover the container, maintaining aspect ratio
             />
           </div>
