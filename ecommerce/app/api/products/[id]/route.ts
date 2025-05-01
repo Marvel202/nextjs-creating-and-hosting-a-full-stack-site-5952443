@@ -1,20 +1,19 @@
 import { NextRequest } from 'next/server';
 import { connectToDb } from '@/app/api/db';
 
-// Update the params type to match Next.js route segment config
-type Params = {
-  params: {
-    id: string;
-  };
-  searchParams: { [key: string]: string | string[] | undefined };
-};
+interface RouteSegment {
+  id: string;
+}
 
 type CartBody = {
   productId: string;
 }
 
-export async function GET(request: NextRequest, context: Params) {
-  const userId = context.params.id;
+export async function GET(
+  request: NextRequest,
+  { params }: { params: RouteSegment }
+) {
+  const userId = params.id;
   const { db } = await connectToDb();
 
   const userCart = await db.collection('carts').findOne({ userId });
@@ -33,8 +32,11 @@ export async function GET(request: NextRequest, context: Params) {
   })));
 }
 
-export async function POST(request: NextRequest, context: Params) {
-  const userId = context.params.id;
+export async function POST(
+  request: NextRequest,
+  { params }: { params: RouteSegment }
+) {
+  const userId = params.id;
   const { db } = await connectToDb();
   const body: CartBody = await request.json();
   const productId = body.productId;
@@ -55,8 +57,11 @@ export async function POST(request: NextRequest, context: Params) {
   })), { status: 201 });
 }
 
-export async function DELETE(request: NextRequest, context: Params) {
-  const userId = context.params.id;
+export async function DELETE(
+  request: NextRequest,
+  { params }: { params: RouteSegment }
+) {
+  const userId = params.id;
   const { db } = await connectToDb();
   const body = await request.json();
   const productId = body.productId;
