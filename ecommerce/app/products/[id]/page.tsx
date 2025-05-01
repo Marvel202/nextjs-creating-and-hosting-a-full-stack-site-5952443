@@ -1,5 +1,6 @@
 import { getProductById } from "@/lib/products";
 import NotFoundPage from "@/app/not-found";
+import Image from "next/image"; 
 
 export const dynamic = 'force-dynamic';
 
@@ -10,12 +11,18 @@ export default async function ProductDetailPage({ params }: { params: { id: stri
   }
 
   return (
-    <div className="container mx-auto p-8 flex flex-col md:flex-row">
-      <div className="md:w-1/2 mb-4 md:mb-0 md:mr-8">
-        <img
-          src={'/' + product.imageUrl}
-          alt="Product image"
-          className="w-full h-auto rounded-lg shadow-md" />
+    <div className="container mx-auto p-8 flex flex-col md:flex-row gap-8">
+      <div className="md:w-1/2">
+        <div className="relative aspect-square w-full">
+          <Image
+            src={`/${product.imageUrl}`}
+            alt={product.name}
+            fill
+            className="object-cover rounded-lg shadow-md"
+            sizes="(max-width: 768px) 100vw, 50vw"
+            priority
+          />
+        </div>
       </div>
       <div className="md:w-1/2">
         <h1 className="text-4xl font-bold mb-4">{product.name}</h1>

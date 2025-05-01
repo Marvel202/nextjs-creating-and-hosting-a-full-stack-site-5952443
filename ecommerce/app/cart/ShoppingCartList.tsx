@@ -34,39 +34,36 @@ export default function ShoppingCartList({ initialCartProducts }: {initialCartPr
       <ul className="space-y-4">
         {cartProducts.map(product => (
           <li key={product.id} className="bg-white rounded-lg shadow-md p-4 hover:shadow-lg transition duration-300">
-            <div className="flex flex-col md:flex-row gap-4">
+            <div className="flex gap-4 items-center">
               {/* Image container with fixed dimensions */}
-              <div className="w-full md:w-1/4 h-48 relative">
+              <div className="w-24 h-24 relative flex-shrink-0">
                 <Link href={`/products/${product.id}`}>
                   <Image
-                    src={"/" + product.imageUrl}
+                    src={`/${product.imageUrl}`}
                     alt={product.name}
-                    width={300}
-                    height={300}
+                    fill
                     className="object-cover rounded-lg"
-                    sizes="(max-width: 768px) 100vw, 25vw"
+                    sizes="100px"
                   />
                 </Link>
               </div>
               
-              {/* Product info */}
-              <div className="flex-1 flex flex-col">
+              <div className="flex-1">
                 <Link href={`/products/${product.id}`}>
-                  <h3 className="text-xl font-semibold mb-2">{product.name}</h3>
+                  <h3 className="text-xl font-semibold mb-1">{product.name}</h3>
                   <p className="text-gray-600">${product.price}</p>
                 </Link>
-                <div className="mt-auto flex justify-end">
-                  <button
-                    className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
-                    onClick={(e) => {
-                      e.preventDefault();
-                      removeFromCart(product.id);
-                    }}
-                  >
-                    Remove from Cart
-                  </button>
-                </div>
               </div>
+              
+              <button
+                className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
+                onClick={(e) => {
+                  e.preventDefault();
+                  removeFromCart(product.id);
+                }}
+              >
+                Remove from Cart
+              </button>
             </div>
           </li>
         ))}
