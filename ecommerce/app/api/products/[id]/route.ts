@@ -1,20 +1,20 @@
 import { NextRequest } from 'next/server';
 import { connectToDb } from '@/app/api/db';
 
-// Define a specific type for your route params
-type RouteParams = {
+// Update the params type to match Next.js route segment config
+type Params = {
   params: {
-    id: string; // Explicitly type the id parameter
-  }
+    id: string;
+  };
+  searchParams: { [key: string]: string | string[] | undefined };
 };
 
 type CartBody = {
   productId: string;
 }
 
-// Apply the specific type to all handlers
-export async function GET(request: NextRequest, { params }: RouteParams) {
-  const userId = params.id;
+export async function GET(request: NextRequest, context: Params) {
+  const userId = context.params.id;
   const { db } = await connectToDb();
 
   const userCart = await db.collection('carts').findOne({ userId });
@@ -33,8 +33,8 @@ export async function GET(request: NextRequest, { params }: RouteParams) {
   })));
 }
 
-export async function POST(request: NextRequest, { params }: RouteParams) {
-  const userId = params.id;
+export async function POST(request: NextRequest, context: Params) {
+  const userId = context.params.id;
   const { db } = await connectToDb();
   const body: CartBody = await request.json();
   const productId = body.productId;
@@ -55,8 +55,8 @@ export async function POST(request: NextRequest, { params }: RouteParams) {
   })), { status: 201 });
 }
 
-export async function DELETE(request: NextRequest, { params }: RouteParams) {
-  const userId = params.id;
+export async function DELETE(request: NextRequest, context: Params) {
+  const userId = context.params.id;
   const { db } = await connectToDb();
   const body = await request.json();
   const productId = body.productId;
