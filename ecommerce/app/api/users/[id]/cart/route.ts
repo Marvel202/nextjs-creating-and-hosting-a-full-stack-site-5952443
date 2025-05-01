@@ -1,16 +1,16 @@
 // app/api/users/[id]/cart/route.ts
 import { NextRequest } from 'next/server';
 import { connectToDb } from '@/app/api/db';
-
+/*
 type Params = {
   id: string;
 }
-
+*/
 type CartBody = {
   productId: string;
 }
 
-export async function GET(request: NextRequest, { params }: { params: Params }) {
+export async function GET(request: NextRequest, { params }: { params: { [key: string]: string }}) {
   const userId = params.id; // No await needed - params is available synchronously
   const { db } = await connectToDb();
 
@@ -30,7 +30,7 @@ export async function GET(request: NextRequest, { params }: { params: Params }) 
   })));
 }
 
-export async function POST(request: NextRequest, { params }: { params: Params }) {
+export async function POST(request: NextRequest, { params }: { params:{ [key: string]: string }}) {
   const userId = params.id; // No await needed
   const { db } = await connectToDb();
   const body: CartBody = await request.json();
@@ -52,7 +52,7 @@ export async function POST(request: NextRequest, { params }: { params: Params })
   })), { status: 201 });
 }
 
-export async function DELETE(request: NextRequest, { params }: { params: Params }) {
+export async function DELETE(request: NextRequest, { params }: { params: { [key: string]: string } }) {
   const userId = params.id; // No await needed
   const { db } = await connectToDb();
   const body = await request.json();
