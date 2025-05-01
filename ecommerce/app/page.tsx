@@ -1,100 +1,139 @@
-import Image from "next/image";
+// app/page.tsx
+'use client';
+import { motion } from "framer-motion";
+import { useEffect, useState } from "react";
+import { FaInstagram, FaFacebook, FaPinterest, FaTwitter } from 'react-icons/fa';
 
 export default function Home() {
-  return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="https://nextjs.org/icons/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-semibold">
-              app/page.tsx
-            </code>
-            .
-          </li>
-          <li>Save and see your changes instantly. I just did!</li>
-        </ol>
+  const [isMounted, setIsMounted] = useState(false);
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="https://nextjs.org/icons/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:min-w-44"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
-        </div>
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
+
+  // Solid colored balls with vibrant colors
+  const floatingBalls = [
+    { size: 180, color: 'bg-pink-400', x: 15, y: 20 },
+    { size: 220, color: 'bg-blue-400', x: 75, y: 30 },
+    { size: 200, color: 'bg-purple-400', x: 25, y: 60 },
+    { size: 240, color: 'bg-cyan-400', x: 65, y: 50 }
+  ];
+
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-pink-50 via-purple-50 to-blue-50 p-8 overflow-hidden relative">
+      {/* Solid colored floating balls */}
+      {isMounted && floatingBalls.map((ball, index) => (
+        <motion.div
+          key={index}
+          className={`absolute rounded-full ${ball.color} shadow-lg`}
+          style={{
+            width: `${ball.size}px`,
+            height: `${ball.size}px`,
+            left: `${ball.x}%`,
+            top: `${ball.y}%`,
+          }}
+          initial={{ opacity: 0 }}
+          animate={{
+            opacity: 0.8,
+            y: [0, -40, 0],
+            x: [0, 25, 0],
+          }}
+          transition={{
+            duration: 15 + index * 3,
+            repeat: Infinity,
+            repeatType: "reverse",
+            ease: "easeInOut"
+          }}
+        />
+      ))}
+
+      <main className="relative z-20 max-w-6xl mx-auto flex flex-col items-center justify-center min-h-[80vh] gap-12">
+        {/* Hero section */}
+        <motion.div 
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8 }}
+          className="text-center"
+        >
+          <h1 className="text-6xl md:text-8xl font-bold mb-6 bg-clip-text text-transparent bg-gradient-to-r from-purple-600 to-pink-600">
+            Express Yourself
+          </h1>
+          <p className="text-xl md:text-2xl text-gray-700 mb-8 max-w-2xl mx-auto">
+            The coolest place for teens to discover, create, and connect
+          </p>
+          
+          <div className="flex gap-4 justify-center flex-wrap">
+            <motion.button
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              className="px-8 py-3 rounded-full bg-black text-white font-bold text-lg shadow-lg hover:bg-gray-800 transition-all"
+            >
+              Get Started
+            </motion.button>
+            <motion.button
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              className="px-8 py-3 rounded-full bg-white text-black font-bold text-lg shadow-lg hover:bg-gray-100 transition-all border-2 border-black"
+            >
+              Explore
+            </motion.button>
+          </div>
+        </motion.div>
+
+        {/* Product cards */}
+         {/* Glassmorphism cards */}
+        <motion.div 
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.3, duration: 0.8 }}
+          className="w-full mt-12"
+        >
+          <h2 className="text-3xl font-bold mb-8 text-center text-gray-800">Trending Now</h2>
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+            {[
+              { name: "Graffiti Hoodie", price: "$49", emoji: "🧥", color: "from-purple-500 to-pink-500" },
+              { name: "Retro Sneakers", price: "$89", emoji: "👟", color: "from-blue-500 to-cyan-500" },
+              { name: "Neon Headphones", price: "$59", emoji: "🎧", color: "from-green-500 to-teal-500" },
+              { name: "Skateboard", price: "$75", emoji: "🛹", color: "from-red-500 to-orange-500" },
+            ].map((item, index) => (
+              <motion.div
+                key={index}
+                whileHover={{ 
+                  y: -10,
+                  scale: 1.03,
+                  boxShadow: "0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)"
+                }}
+                className="relative group backdrop-blur-lg bg-white/40 rounded-2xl p-6 shadow-xl text-center cursor-pointer border border-white/30 overflow-hidden transition-all duration-300"
+              >
+                <div className={`absolute inset-0 bg-gradient-to-br ${item.color} opacity-0 group-hover:opacity-30 transition-opacity duration-500 -z-10`}></div>
+                <div className="text-5xl mb-4">{item.emoji}</div>
+                <h3 className="text-xl font-bold mb-2 text-gray-800">{item.name}</h3>
+                <p className="text-gray-700 font-medium">{item.price}</p>
+              </motion.div>
+            ))}
+          </div>
+        </motion.div>
+      
       </main>
-      <footer className="row-start-3 flex gap-6 flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
+
+      <footer className="relative z-30 mt-20 py-8 text-center bg-transparent">
+        <div className="flex justify-center gap-6 mb-4">
+          <motion.a whileHover={{ y: -3, scale: 1.1 }} href="https://instagram.com" target="_blank" rel="noopener noreferrer">
+            <FaInstagram className="text-2xl text-gray-700 hover:text-pink-600 transition-colors" />
+          </motion.a>
+          <motion.a whileHover={{ y: -3, scale: 1.1 }} href="https://facebook.com" target="_blank" rel="noopener noreferrer">
+            <FaFacebook className="text-2xl text-gray-700 hover:text-blue-600 transition-colors" />
+          </motion.a>
+          <motion.a whileHover={{ y: -3, scale: 1.1 }} href="https://pinterest.com" target="_blank" rel="noopener noreferrer">
+            <FaPinterest className="text-2xl text-gray-700 hover:text-red-600 transition-colors" />
+          </motion.a>
+          <motion.a whileHover={{ y: -3, scale: 1.1 }} href="https://twitter.com" target="_blank" rel="noopener noreferrer">
+            <FaTwitter className="text-2xl text-gray-700 hover:text-blue-400 transition-colors" />
+          </motion.a>
+        </div>
+        <p className="text-gray-700">
+          © {new Date().getFullYear()} TeenStyle. All rights reserved.
+        </p>
       </footer>
     </div>
   );

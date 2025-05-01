@@ -9,33 +9,41 @@ export default function ProductsList({ products, initialCartProducts = [] }: { p
   const [cartProducts, setCartProducts] = useState(initialCartProducts)
   
   async function addToCart(productId: string) {
-     const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000';
-      const response = await fetch(`${baseUrl}/api/users/2/cart`, {
-      method: 'POST',
-      body: JSON.stringify({
-        productId,
-      }),
-      headers: {
-        'Content-Type': 'application/json',
+    try {
+      const response = await fetch('/api/users/2/cart', {
+        method: 'POST',
+        body: JSON.stringify({ productId }),
+        headers: { 'Content-Type': 'application/json' }
+      });
+      
+      if (!response.ok) {
+        throw new Error('Failed to add to cart');
       }
-    });
-    const updatedCartProducts = await response.json();
-    setCartProducts(updatedCartProducts); 
+      
+      const updatedCartProducts = await response.json();
+      setCartProducts(updatedCartProducts);
+    } catch (error) {
+      console.error('Error adding to cart:', error);
+    }
   }
 
   async function removeFromCart(productId: string) {
-    const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000';
-    const response = await fetch(`${baseUrl}/api/users/2/cart`, {
-      method: 'DELETE',
-      body: JSON.stringify({
-        productId,
-      }),
-      headers: {
-        'Content-Type': 'application/json',
+    try {
+      const response = await fetch('/api/users/2/cart', {
+        method: 'DELETE',
+        body: JSON.stringify({ productId }),
+        headers: { 'Content-Type': 'application/json' }
+      });
+      
+      if (!response.ok) {
+        throw new Error('Failed to remove from cart');
       }
-    });
-    const updatedCartProducts = await response.json();
-    setCartProducts(updatedCartProducts);
+      
+      const updatedCartProducts = await response.json();
+      setCartProducts(updatedCartProducts);
+    } catch (error) {
+      console.error('Error removing from cart:', error);
+    }
   }
 
   function productIsInCart(productId: string) {
@@ -50,33 +58,32 @@ export default function ProductsList({ products, initialCartProducts = [] }: { p
           href={`/products/${product.id}`}
           className="bg-white rounded-lg shadow-md p-4 hover:shadow-lg transition duration-300"
         >
-          <div className="flex justify-center mb-4 h-48 relative"> {/* Added height and relative positioning */}
+          <div className="flex justify-center mb-4 h-48 relative">
             <Image
               src={'/' + product.imageUrl}
-              alt="Product image"
-              width={300}
-              height={300}
-              className="object-cover rounded-md" // Cover the container, maintaining aspect ratio
+              alt={product.name}
+              fill
+              className="object-cover rounded-md"
+              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
             />
           </div>
           <h2 className="text-xl font-semibold mb-2">{product.name}</h2>
           <p className="text-gray-600">${product.price}</p>
-          {productIsInCart(product.id)
-            ? (
-              <button
-              className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded w-full"
-              onClick={(e) => {
-                e.preventDefault();
-                removeFromCart(product.id);
-              }}>Remove from Cart</button>
-            ) : (
-              <button
-              className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded w-full"
-              onClick={(e) => {
-                e.preventDefault();
-                addToCart(product.id);
-              }}>Add to Cart</button>
-            )}
+          <button
+            className={`mt-4 w-full py-2 px-4 rounded font-bold text-white ${
+              productIsInCart(product.id) 
+                ? 'bg-pink-500 hover:bg-pink-600' 
+                : 'bg-blue-500 hover:bg-blue-600'
+            }`}
+            onClick={(e) => {
+              e.preventDefault();
+              productIsInCart(product.id) 
+                ? removeFromCart(product.id) 
+                : addToCart(product.id);
+            }}
+          >
+            {productIsInCart(product.id) ? 'Remove from Cart' : 'Add to Cart'}
+          </button>
         </Link>
       ))}
     </div>

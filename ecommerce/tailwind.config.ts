@@ -15,5 +15,17 @@ const config: Config = {
     },
   },
   plugins: [],
+  extend: {
+  colors: {
+    pink: {
+      100: '#FFE4E6',
+      600: '#DB2777'
+    },
+    purple: {
+      100: '#F3E8FF',
+      600: '#9333EA'
+    }
+  }
+},
 };
 export default config;
